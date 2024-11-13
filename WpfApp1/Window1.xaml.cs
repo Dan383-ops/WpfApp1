@@ -17,11 +17,65 @@ namespace WpfApp1
 	/// <summary>
 	/// Логика взаимодействия для Window1.xaml
 	/// </summary>
+
 	public partial class Window1 : Window
 	{
+		private double _currentValue = 0;
+		private double _storedValue = 0;
+		private double _operation = '\0';
 		public Window1()
 		{
 			InitializeComponent();
+		}
+
+		private void NumberButton_Click(object sender, RoutedEventArgs e)
+		{
+			Button button = (Button)sender;
+			string number = button.Content.ToString();
+			if(txtDisplay.Text == "0" && number != ".")
+			{
+				txtDisplay.Text = number;
+			}
+			else
+			{
+				txtDisplay.Text += number;
+			}
+		}
+
+		private void OperationButton_Click(object sender, RoutedEventArgs e)
+		{
+			Button button = (Button)sender;
+			_operation = button.Content.ToString()[0];
+			_storedValue = double.Parse(txtDisplay.Text);
+			txtDisplay.Text = "0";
+		}
+
+		private void EqualsButton_Click(object sender, RoutedEventArgs e)
+		{
+			_currentValue = double.Parse(txtDisplay.Text);
+			switch (_operation)
+			{
+				case '+':
+					_currentValue = _storedValue + _currentValue;
+					break;
+				case '-':
+					_currentValue = _storedValue - _currentValue;
+					break;
+				case '*':
+					_currentValue = _currentValue * _storedValue;
+					break;
+				case '/':
+					if(_currentValue != 0)
+					{
+						_currentValue = _storedValue / _currentValue;
+					} else
+					{
+						MessageBox.Show("Що ты лысый? Обоюдно!");
+					}
+					break;
+			}
+			txtDisplay.Text = _currentValue.ToString();
+			_operation = '\0';
 		}
 
 		private void btn7_Click(object sender, RoutedEventArgs e)
@@ -96,6 +150,10 @@ namespace WpfApp1
 
 		private void btnclear_Click(object sender, RoutedEventArgs e)
 		{
+			txtDisplay.Text = "0";
+			_currentValue = 0;
+			_operation = '\0';
+			_storedValue = 0;
 
 		}
 
